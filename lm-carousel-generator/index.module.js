@@ -1,5 +1,5 @@
-import initForm from "./components/Form.module.js"
+import initForm from './components/Form.module.js'
 
-const formNode = document.querySelector(".generator-form_container");
+const formNode = document.querySelector('.generator-form_container')
 
-initForm(formNode);
+initForm(formNode)

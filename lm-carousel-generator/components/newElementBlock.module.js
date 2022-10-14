@@ -8,10 +8,10 @@ import { getValue } from './../utils/getValue.module.js'
 
 export class newElementBlock extends Component {
   state = {
-    collapsed: true,
+    collapsed: true
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.inputUrl = createRef()
@@ -21,7 +21,7 @@ export class newElementBlock extends Component {
     this.inputCredits = createRef()
   }
 
-  getImageProps() {
+  getImageProps () {
     const imageProps = {}
 
     imageProps.url = getValue(this.inputUrl)
@@ -34,21 +34,21 @@ export class newElementBlock extends Component {
     return imageProps
   }
 
-  toggleCollasped() {
+  toggleCollasped () {
     this.setState(curr => ({
       ...curr,
       collapsed: !curr.collapsed
     }))
   }
 
-  render(props) {
+  render (props) {
     document.addEventListener('onValidate', () => {
       const newImage = this.getImageProps()
       props.setNewElement(newImage)
     })
 
     const classList = `generator-form_element ${props.class} ${this.state.collapsed ? 'generator-form_element--collapsed' : ''}`
-    const toggleText = this.state.collapsed ? "Plus d'options" : "Masquer"
+    const toggleText = this.state.collapsed ? "Plus d'options" : 'Masquer'
 
     return html`
               <div class=${classList}>

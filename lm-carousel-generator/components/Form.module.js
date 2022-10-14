@@ -25,7 +25,7 @@ class Form extends Component {
   /* * * * * * * * * * * * * * * * * * *
    * CONSTRUCTOR
    * * * * * * * * * * * * * * * * * * */
-  constructor() {
+  constructor () {
     super()
     this.onValidate = new Event('onValidate')
 
@@ -56,10 +56,7 @@ class Form extends Component {
   /* * * * * * * * * * * * * * * * * * *
    * METHODS
    * * * * * * * * * * * * * * * * * * */
-  componentDidMount() {
-  }
-
-  validateForm() {
+  validateForm () {
     this.newSettings = {}
     this.newImages = []
 
@@ -69,16 +66,16 @@ class Form extends Component {
     if (this.newImages.length === 0) {
       this.setState(curr => ({
         ...curr,
-        errorMessage: 'Il faut au moins une image !',
-      }))  
+        errorMessage: 'Il faut au moins une image !'
+      }))
       return
     }
 
     if (this.newImages.filter(img => img.url != '').length === 0) {
       this.setState(curr => ({
         ...curr,
-        errorMessage: 'Il faut au moins renseigner une URL !',
-      }))  
+        errorMessage: 'Il faut au moins renseigner une URL !'
+      }))
       return
     }
 
@@ -86,18 +83,18 @@ class Form extends Component {
       ...curr,
       carouselSettings: this.newSettings,
       carouselImages: this.newImages,
-      errorMessage: '',
+      errorMessage: ''
     }))
   }
 
-  setSettings() {
+  setSettings () {
     this.newSettings.type = getValue(this.inputType)
 
     this.newSettings.dots = this.newSettings.type === 'story' ? true : getValue(this.inputDots)
     this.newSettings.arrowLeft = this.newSettings.type === 'story' ? true : getValue(this.inputArrowLeft)
     this.newSettings.arrowRight = this.newSettings.type === 'story' ? true : getValue(this.inputArrowRight)
     this.newSettings.toggleDescriptionBtn = this.newSettings.type === 'story' ? false : getValue(this.inputToggleDescriptionBtn)
-    
+
     this.newSettings.imageFit = getValue(this.inputImageFit)
 
     this.newSettings.backgroundColor = this.newSettings.type === 'story' ? getValue(this.inputBackgroundColor) : ''
@@ -114,56 +111,56 @@ class Form extends Component {
 
     this.setState(curr => ({
       ...curr,
-      carouselSettings: this.newSettings,
+      carouselSettings: this.newSettings
     }))
 
     console.log(this.newSettings)
   }
 
-  addNewElement() {
+  addNewElement () {
     const newIndex = this.state.elements[this.state.elements.length - 1] + 1
     const newArray = [...this.state.elements, newIndex]
 
     this.setState(curr => ({
       ...curr,
-      elements: newArray,
+      elements: newArray
     }))
   }
 
-  deleteElement(index) {
+  deleteElement (index) {
     const newArray = [...this.state.deleted, index]
 
     this.setState(curr => ({
       ...curr,
-      deleted: newArray,
+      deleted: newArray
     }))
   }
 
-  setNewElement(element) {
+  setNewElement (element) {
     if (typeof element.url === 'undefined') return
     if (this.newImages.find(image => image.id === element.id)) return
 
     this.newImages.push(element)
   }
 
-  toggleState(element) {
+  toggleState (element) {
     this.setState(curr => ({
       ...curr,
-      [element]: !curr[element],
+      [element]: !curr[element]
     }))
   }
 
-  setCarouselType(value) {
+  setCarouselType (value) {
     this.setState(curr => ({
       ...curr,
-      carouselType: value,
+      carouselType: value
     }))
   }
 
   /* * * * * * * * * * * * * * * * * * *
    * RENDER
    * * * * * * * * * * * * * * * * * * */
-  render() {
+  render () {
     const errorActive = this.state.errorMessage ? 'generator-form_validate-error--active' : ''
 
     return html`
@@ -199,7 +196,7 @@ class Form extends Component {
                       ...${{ name: 'image-fit', label: 'Ajustement des images', inputRef: this.inputImageFit, options: [{ value: 'cover', title: 'Cover' }, { value: 'contain', title: 'Contain' }] }} />
                       
                       ${
-                        this.state.carouselType === 'carousel' 
+                        this.state.carouselType === 'carousel'
                         ? html`
                             <${InputBlock} ...${{ type: 'text', name: 'description', label: 'Description', inputRef: this.inputDescription, settings: { placeholder: 'La description commune' } }} />
                             <${InputBlock} ...${{ type: 'checkbox', name: 'toggle-description', label: 'Masquer la description derrière un "voir plus"', inputRef: this.inputToggleDescriptionBtn }} />`
@@ -218,10 +215,10 @@ class Form extends Component {
                     ${
                       this.state.elements.map((_el, i) => {
                         if (this.state.deleted.includes(i)) return
-                        return html`<${newElementBlock} ...${{ 
-                          class: 'new-element-block--' + (i+1), 
-                          index: i, 
-                          setNewElement: this.setNewElement, 
+                        return html`<${newElementBlock} ...${{
+                          class: 'new-element-block--' + (i + 1),
+                          index: i,
+                          setNewElement: this.setNewElement,
                           deleteElement: this.deleteElement,
                           carouselType: this.state.carouselType
                         }} />`
@@ -249,7 +246,7 @@ class Form extends Component {
 }
 
 // renderer
-export default async function renderer(node) {
+export default async function renderer (node) {
   // await injectStyles('{{PARENT_URL}}/styles.css')
   render(html`<${Form} />`, node)
 }

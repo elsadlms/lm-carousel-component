@@ -6,11 +6,11 @@ export class Snippet extends Component {
     notification: false
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
   }
 
-  generateSnippet() {
+  generateSnippet () {
     const componentName = this.props.carouselSettings.type === 'carousel'
       ? 'lmh-carousel'
       : 'lmh-carousel-story'
@@ -28,29 +28,29 @@ export class Snippet extends Component {
     return this.cleanOutput(output)
   }
 
-  copyToClipboard(text) {
+  copyToClipboard (text) {
     if (!navigator.clipboard) return
     navigator.clipboard.writeText(text)
 
     this.displayNotification()
   }
 
-  displayNotification() {
+  displayNotification () {
     this.setState(curr => ({
       ...curr,
-      notification: true,
+      notification: true
     }))
 
     window.setTimeout(() => {
       this.setState(curr => ({
         ...curr,
-        notification: false,
+        notification: false
       }))
     }, 2000)
   }
 
-  generateHead(type) {
-    const root = type === "carousel"
+  generateHead (type) {
+    const root = type === 'carousel'
       ? 'https://assets-decodeurs.lemonde.fr/redacweb/elsa-delmas-carousel-test'
       : 'https://assets-decodeurs.lemonde.fr/redacweb/elsa-delmas-carousel-v2'
 
@@ -64,7 +64,7 @@ export class Snippet extends Component {
     return output
   }
 
-  generateSettings(settings) {
+  generateSettings (settings) {
     const output = `
     <data data-title="settings">
       <data data-title="leftArrow" data-type="boolean">${settings.arrowLeft}</data>
@@ -72,19 +72,19 @@ export class Snippet extends Component {
       <data data-title="dots" data-type="boolean">${settings.dots}</data>
       <data data-title="imageFit" data-type="string">${settings.imageFit}</data>
       <data data-title="loop" data-type="boolean">${settings.loop}</data>
-      ${settings.loop ? `<data data-title="duration" data-type="number">${settings.loopDuration}</data>` : ``}
-      ${settings.maxHeight ? `<data data-title="height" data-type="number">${settings.maxHeightValue}</data>` : ``}
-      ${settings.backgroundColor ? `<data data-title="backgroundColor" data-type="string">${settings.backgroundColor}</data>` : ``}
-      ${settings.title ? `<data data-title="title" data-type="string">${settings.title}</data>` : ``}
-      ${settings.description ? `<data data-title="description" data-type="string">${settings.description}</data>` : ``}
-      ${settings.credits ? `<data data-title="credits" data-type="string">${settings.credits}</data>` : ``}
+      ${settings.loop ? `<data data-title="duration" data-type="number">${settings.loopDuration}</data>` : ''}
+      ${settings.maxHeight ? `<data data-title="height" data-type="number">${settings.maxHeightValue}</data>` : ''}
+      ${settings.backgroundColor ? `<data data-title="backgroundColor" data-type="string">${settings.backgroundColor}</data>` : ''}
+      ${settings.title ? `<data data-title="title" data-type="string">${settings.title}</data>` : ''}
+      ${settings.description ? `<data data-title="description" data-type="string">${settings.description}</data>` : ''}
+      ${settings.credits ? `<data data-title="credits" data-type="string">${settings.credits}</data>` : ''}
       <data data-title="toggleDescriptionBtn" data-type="boolean">${settings.toggleDescriptionBtn}</data>
     </data>
     `
     return output
   }
 
-  generateImages(images) {
+  generateImages (images) {
     const output = `
     <data data-title="images">
       ${images.map((img) => {
@@ -105,15 +105,15 @@ export class Snippet extends Component {
     return output
   }
 
-  cleanOutput(output) {
+  cleanOutput (output) {
     let cleaned = output.split('\n')
     cleaned = cleaned.filter(line => line.trim().length != 0)
     cleaned = cleaned.join('\n')
     return cleaned
   }
 
-  render(props) {
-    const snippetReady = props.carouselSettings.type && !props.error;
+  render (props) {
+    const snippetReady = props.carouselSettings.type && !props.error
     const output = this.generateSnippet()
 
     const notificationActive = this.state.notification ? 'generator-form_snippet-copy-notification--active' : ''
