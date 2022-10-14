@@ -1,0 +1,187 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --ff-marr-sans: "Marr-Sans", Helvetica, Arial, Roboto, sans-serif;
+}
+
+body {
+    margin: 0 auto;
+}
+
+.lmh-carousel-story {
+    --light-grey: #E8EAEE;
+    --grey: #A4A9B4;
+    --dark-grey: #2A303C;
+    --carousel-credits-color: #a2a9ae;
+    --carousel-description-color: #dedede;
+    --carousel-dot-size: 8px;
+    --carousel-dot-color: #d9d9d9;
+    --carousel-dot-color-selected: var(--grey);
+    --carousel-arrow-color: var(--dark-grey);
+    --carousel-arrow-color-disabled: #BDC1C8;
+    --carousel-arrow-bg: var(--light-grey);
+    --carousel-arrow-bg-hover: var(--grey);
+    --image-height: 1fr;
+    background-color: var(--dark-grey);
+    font-family: var(--ff-marr-sans);
+    overflow: hidden;
+    position: relative;
+}
+
+.lmh-carousel-story p {
+    margin: 0;
+    color: #fff;
+}
+
+.lmh-carousel-story_title {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    padding: 20px 32px 16px 16px;
+}
+
+.lmh-carousel-story img,
+.lmh-carousel-story video,
+.lmh-carousel-story_cover img,
+.lmh-carousel-story_cover video {
+    object-fit: cover;
+}
+
+.lmh-carousel-story_contain img,
+.lmh-carousel-story_contain video {
+    object-fit: contain;
+}
+
+.lmh-carousel-story_images {
+    display: grid;
+    grid-template-rows: minmax(0, var(--image-height)) auto;
+    grid-auto-flow: column;
+    padding: 0 16px;
+    grid-gap: 16px;
+    transition: transform 800ms ease-in-out;
+    grid-auto-flow: column;
+    position: relative;
+}
+
+.lmh-carousel-story_image {
+    display: contents;
+}
+
+.lmh-carousel-story_image > * {
+    opacity: 0.2;
+    transition: opacity 1000ms;
+}
+
+.lmh-carousel-story_image.selected > * {
+    opacity: 1;
+}
+
+.lmh-carousel-story_image-wrapper {
+    height: 100%;
+    background-color: #000;
+}
+
+.lmh-carousel-story_image img,
+.lmh-carousel-story_image video {
+    height: 100%;
+    width: 100%;
+}
+
+.lmh-carousel-story_image-cover img,
+.lmh-carousel-story_image-cover video {
+    object-fit: cover;
+}
+
+.lmh-carousel-story_image-contain img,
+.lmh-carousel-story_image-contain video {
+    object-fit: contain;
+}
+
+.lmh-carousel-story_caption {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.lmh-carousel-story_caption-credits {
+    padding-top: 0.33rem;
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.4;
+}
+
+.lmh-carousel-story_caption-description {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.lmh-carousel-story_progress-dots {
+    display: flex;
+    justify-content: center;
+    padding: 16px 0;
+}
+
+.lmh-carousel-story_progress-dot {
+    display: block;
+    margin: calc(var(--carousel-dot-size)/2);
+    height: var(--carousel-dot-size);
+    width: var(--carousel-dot-size);
+    border-radius: var(--carousel-dot-size);
+    background-color: var(--carousel-dot-color);
+    cursor: pointer;
+    z-index: 2;
+    opacity: 0.4;
+}
+
+.lmh-carousel-story_progress-dot.selected {
+    opacity: 1;
+}
+
+.lmh-carousel-story_controls {
+    opacity: 0;
+    transition: opacity 600ms;
+}
+
+.lmh-carousel-story_controls.lmh-carousel-story_controls-visible {
+    opacity: 1;
+}
+
+.lmh-carousel-story_arrows {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 16px;
+}
+
+.lmh-carousel-story_arrow {
+    cursor: pointer;
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--carousel-arrow-bg);
+    transition: background-color 100ms, opacity 100ms;
+}
+
+.lmh-carousel-story_arrow .arrow-symbol {
+    fill: var(--carousel-arrow-color);
+}
+
+.lmh-carousel-story_arrow:hover {
+    background-color: var(--carousel-arrow-bg-hover);
+}
+
+.lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled .arrow-symbol {
+    fill: var(--carousel-arrow-color-disabled);
+}

@@ -1,0 +1,311 @@
+p,
+pre {
+  margin: 0;
+}
+
+h3 {
+  font-size: 1.2rem;
+  padding-bottom: 12px;
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.generator-form_container {
+  --lighter-grey: rgba(245, 246, 248, 0.5);
+  --light-grey: #E8EAEE;
+  --grey: #D5D8DC;
+  --dark-grey: #2A303C;
+  color: var(--dark-grey);
+  max-width: 1024px;
+  margin: 64px auto;
+  padding: 0 32px;
+  font-family: Marr-Sans;
+}
+
+.generator-form > div {
+  margin-bottom: 32px;
+}
+
+.generator-form_settings-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 32px;
+}
+
+.generator-form_images-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 12px;
+  align-items: start;
+}
+
+@media (min-width: 700px) {
+  .generator-form_settings-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .generator-form_images-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .generator-form_settings-columns {
+    grid-template-columns: 1fr 2fr;
+  }
+  
+  .generator-form_images-columns {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.generator-form_images-btn {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+  margin-top: 12px;
+  display: inline-block;
+}
+
+.generator-form select {
+  color: var(--dark-grey);
+}
+
+.generator-form select,
+.generator-form input {
+  padding: 6px;
+  font-size: 0.9em;
+}
+
+.generator-form label + input[type="text"],
+.generator-form label + select {
+  margin-top: 6px;
+}
+
+.generator-form input[type="checkbox"] {
+  height: 16px;
+  width: 16px;
+  margin-right: 6px;
+}
+
+.generator-form input[type="number"] {
+  padding: 2px;
+  margin-left: 8px;
+}
+
+.generator-form_input + .generator-form_element-collapsible,
+.generator-form_input + .generator-form_input {
+  padding-top: 12px;
+}
+
+.generator-form_input--disabled {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.generator-form_input--mandatory label::after {
+  content: '*';
+  color: red;
+}
+
+.generator-form_input-select,
+.generator-form_input-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.generator-form_input-checkbox {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.generator-form_input.generator-form_input-number {
+  padding-top: 6px;
+}
+
+.generator-form_input-toggle {
+  margin-bottom: 24px;
+}
+
+.generator-form_input-toggle-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 24px;
+  margin-bottom: 24px;
+}
+
+.generator-form_input-toggle-option {
+  cursor: pointer;
+  text-align: center;
+}
+
+.generator-form_input-toggle-option:hover p {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.generator-form_input-toggle-option-illustration {
+  margin-bottom: 12px;
+  padding: 32px;
+  background-color: var(--light-grey);
+ border: 1px solid transparent;
+}
+
+.generator-form_input-toggle-option-illustration img {
+  border-radius: 6px;
+}
+
+.generator-form_input-toggle-option--selected .generator-form_input-toggle-option-illustration {
+ border: 1px dashed var(--dark-grey);
+}
+
+.generator-form_input-toggle-option--selected p {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.06em;
+}
+
+.generator-form_element {
+  border: 1px dashed #a6a9b1;
+  padding: 12px;
+  background-color: var(--lighter-grey);
+  font-size: 0.9em;
+}
+
+.generator-form_element--collapsed .generator-form_element-collapsible {
+  color: red;
+  height: 0;
+  overflow: hidden;
+}
+
+.generator-form_element-toggle-collapsed {
+  display: inline-flex;
+  align-items: center;
+  margin: 12px 0px;
+  cursor: pointer;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.generator-form_element--collapsed .generator-form_element-toggle-collapsed {
+  margin-bottom: 0;
+}
+
+.generator-form_element-toggle-collapsed::before {
+  content: '‒';
+  font-weight: 400;
+  margin-right: 0.3em;
+  border: 1px solid;
+  border-radius: 100%;
+  height: 12px;
+  width: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  align-items: flex-end;
+  line-height: 14px;
+}
+
+.generator-form_element--collapsed .generator-form_element-toggle-collapsed::before {
+  content: '+';
+  line-height: 13px;
+}
+
+.generator-form_element-delete-btn {
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  cursor: pointer;
+  opacity: 0.6;
+  margin-top: 24px;
+}
+
+.generator-form_element-delete-btn::before {
+  content: 'X ';
+}
+
+.generator-form_element-delete-btn:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.generator-form_validate {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.generator-form_validate-btn {
+  padding: 12px 24px;
+  display: inline-block;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: var(--light-grey);
+  transition: background-color 200ms;
+  font-weight: 500;
+}
+
+.generator-form_validate-btn:hover {
+  background-color: var(--grey);
+}
+
+.generator-form_validate-error {
+  margin-left: 1em;
+  color: red;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.generator-form_validate-error--active {
+  opacity: 1;
+}
+
+.generator-form_snippet-container {
+  background-color: var(--dark-grey);
+  color: #eee;
+  overflow-x: scroll;
+  padding: 24px;
+  border-radius: 6px;
+}
+
+.generator-form_snippet-code {
+  margin-top: 32px;
+}
+
+.generator-form_snippet-copy {
+  display: flex;
+  padding-bottom: 1em;
+  position: absolute;
+}
+
+.generator-form_snippet-copy-btn {
+  text-transform: uppercase;
+  font-size: 0.9em;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: opacity 100ms;
+  cursor: pointer;
+}
+
+.generator-form_snippet-copy-btn--disabled {
+  opacity: 0.2;
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.generator-form_snippet-copy-notification {
+  opacity: 0;
+  transition: opacity 200ms;
+  margin-left: 1em;
+  color: #a4ffb0;
+}
+
+.generator-form_snippet-copy-notification--active {
+  opacity: 0.8;
+}
