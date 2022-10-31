@@ -180,7 +180,7 @@ class Form extends Component {
                           <${InputBlock}
                           ...${{ type: 'checkbox', name: 'loop', label: 'Lecture en boucle', inputRef: this.inputLoop, onChange: () => this.toggleState('loop') }} />
                           <${InputBlock}
-                          ...${{ type: 'number', name: 'loop-duration', label: 'Durée (en  ms) :', inputRef: this.inputLoopDuration, settings: { min: 500, max: 10000, step: 100, value: 2000 }, disabled: !this.state.loop }} />
+                          ...${{ type: 'number', name: 'loop-duration', label: 'Durée par image (en ms) :', inputRef: this.inputLoopDuration, settings: { min: 500, max: 10000, step: 100, value: 2000 }, disabled: !this.state.loop }} />
                         `
                         : html`
                           <${InputBlock} ...${{ type: 'text', name: 'backgroundColor', label: 'Couleur de fond', inputRef: this.inputBackgroundColor, settings: { placeholder: 'Au format hexadécimal : #2A303C' } }} />
