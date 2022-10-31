@@ -25,47 +25,47 @@ export class CarouselElement extends Component {
     }
   }
 
-  render ({ media, selected, settings, imageWrapperRef }) {
-    if (media.url.endsWith('.mp4') && this.video.current) {
+  render (props) {
+    if (props.media.url.endsWith('.mp4') && this.video.current) {
       // on lance automatiquement la vidéo si on arrive dessus
-      if (selected && !this.lastSelected) {
+      if (props.selected && !this.lastSelected) {
         this.video.current.play()
       }
       // et on met en pause si on en part
-      if (this.lastSelected && !selected) {
+      if (this.lastSelected && !props.selected) {
         this.video.current.pause()
       }
     }
 
-    this.lastSelected = selected
+    this.lastSelected = props.selected
 
     let displayCaption = true
 
     let credits = ''
-    if (settings.credits) credits = settings.credits
-    if (media.credits) credits = media.credits
+    if (props.settings.credits) credits = props.settings.credits
+    if (props.media.credits) credits = props.media.credits
 
     let description = ''
-    if (settings.description) description = settings.description
-    if (media.description) description = media.description
+    if (props.settings.description) description = props.settings.description
+    if (props.media.description) description = props.media.description
 
     if (credits === '' && description === '') { displayCaption = false }
 
-    let mediaURL = media.url
-    if (media.mobileUrl && window.innerWidth < 768) {
-      mediaURL = media.mobileUrl
+    let mediaURL = props.media.url
+    if (props.media.mobileUrl && window.innerWidth < 768) {
+      mediaURL = props.media.mobileUrl
     }
 
     const imageClass =
       `lmh-carousel_image 
-      ${selected ? 'selected' : ''} 
-      ${media.imageFit ? 'lmh-carousel_image-' + media.imageFit : ''}`
+      ${props.selected ? 'selected' : ''} 
+      ${props.media.imageFit ? 'lmh-carousel_image-' + props.media.imageFit : ''}`
 
     return html`
         <div class="lmh-carousel-story_image ${imageClass}">
-            <div ref=${imageWrapperRef} class="lmh-carousel-story_image-wrapper">
-                ${media.url.endsWith('.mp4')
-                  ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${selected}" src="${mediaURL}"/>`
+            <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
+                ${props.media.url.endsWith('.mp4')
+                  ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
                   : html`<img src="${mediaURL}"/>`}
             </div>
             ${displayCaption
