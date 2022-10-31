@@ -14,6 +14,10 @@ export class CarouselElement extends Component {
   }
 
   toggleVideo () {
+    if (!this.props.selected) {
+      return
+    }
+    
     if (this.video.current.paused) {
       this.video.current.play()
     } else {
