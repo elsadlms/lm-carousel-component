@@ -33,6 +33,10 @@ class Carousel extends Component {
     this.defaultLoopDuration = 2000
     this.loopDuration = Number.isInteger(this.settings.duration) ? this.settings.duration : this.defaultLoopDuration
 
+    this.componentRef = createRef()
+    this.imageWrapperRef = createRef()
+    this.titleRef = createRef()
+
     this.calculateDimensions = this.calculateDimensions.bind(this)
     this.fixArrowsPosition = this.fixArrowsPosition.bind(this)
     this.positionArrows = this.positionArrows.bind(this)
@@ -66,7 +70,9 @@ class Carousel extends Component {
   }
 
   fixArrowsPosition () {
-    const titleDimensions = document.querySelector('.lmh-carousel-story_title').getBoundingClientRect()
+    if (!this.titleRef) return
+
+    const titleDimensions = this.titleRef.current.getBoundingClientRect()
     const fixed = this.state.arrowsPos > (titleDimensions.height + 50)
 
     if (!fixed) {
@@ -153,8 +159,11 @@ class Carousel extends Component {
   }
 
   positionArrows () {
-    const titleDimensions = document.querySelector('.lmh-carousel-story_title').getBoundingClientRect()
-    const imageDimensions = document.querySelector('.lmh-carousel-story_image-wrapper').getBoundingClientRect()
+    if (!this.titleRef) return
+    if (!this.imageWrapperRef) return
+
+    const titleDimensions = this.titleRef.current.getBoundingClientRect()
+    const imageDimensions = this.imageWrapperRef.current.getBoundingClientRect()
     const arrowsPos = titleDimensions.height + imageDimensions.height / 2
 
     this.setState(curr => ({
@@ -164,7 +173,7 @@ class Carousel extends Component {
   }
 
   calculateCarouselDimensions (images) {
-    const componentWidth = document.querySelector('.lmh-carousel-story').getBoundingClientRect().width
+    const componentWidth = this.componentRef.current.getBoundingClientRect().width
     const carouselWidth = images.length * (componentWidth - 64) + 16
 
     this.setState(curr => ({
@@ -197,10 +206,12 @@ class Carousel extends Component {
           grid-template-columns: repeat(${props.images.length}, 1fr);`
 
     return html`
-          <div class='lmh-carousel-story ${containerClass}' style=${containerStyle}>
+          <div ref=${this.componentRef} class='lmh-carousel-story ${containerClass}' style=${containerStyle}>
               
               ${this.settings.title
-                ? html`<div class='lmh-carousel-story_title'><p>${this.settings.title}</p></div>`
+                ? html`<div ref=${this.titleRef} class='lmh-carousel-story_title'>
+                          <p>${this.settings.title}</p>
+                        </div>`
                 : ''}
 
               <div class='lmh-carousel-story_images' style=${imagesContainerStyle}>
@@ -208,10 +219,11 @@ class Carousel extends Component {
                   ${props.images.map((media, i) => {
                     return html`<${CarouselElement} 
                       ...${{
- media,
+                          media,
                           selected: this.state.index === i,
-                          settings: this.settings
-}} />`
+                          settings: this.settings,
+                          imageWrapperRef: this.imageWrapperRef,
+                      }} />`
                     })}
 
               </div>

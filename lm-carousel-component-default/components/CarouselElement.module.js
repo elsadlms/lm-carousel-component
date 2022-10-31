@@ -23,7 +23,7 @@ export class CarouselElement extends Component {
     }
   }
 
-  render ({ media, selected, settings, toggleDescription, descriptionOpen, descriptionHeight, descriptionToggleBtn }) {
+  render ({ media, selected, settings, toggleDescription, descriptionRef, descriptionOpen, descriptionHeight, descriptionToggleBtn }) {
     if (media.url.endsWith('.mp4') && this.video.current) {
       // on lance automatiquement la vidéo si on arrive dessus
       if (selected && !this.lastSelected) {
@@ -74,7 +74,7 @@ export class CarouselElement extends Component {
               ? html`<div class='lmh-carousel_caption' style='transform: translateY(${descriptionTranslate}px);'>
                       ${description && descriptionToggleBtn
                         ? html`
-                          <div class='lmh-carousel_caption-description-btn' onClick=${toggleDescription}>
+                          <div ref=${this.descriptionRef} class='lmh-carousel_caption-description-btn' onClick=${toggleDescription}>
                             <p>${toggleDescriptionText}</p>
                             <${ToggleSymbol}  ...${{ open: !descriptionOpen }}/>
                           </div>`
@@ -85,7 +85,7 @@ export class CarouselElement extends Component {
                         </div>`
                         : ''}
                       ${description
-                        ? html`<div class='lmh-carousel_caption-description ${descriptionClass}'>
+                        ? html`<div ref=${descriptionRef} class='lmh-carousel_caption-description ${descriptionClass}'>
                           <p>${description}</p>
                         </div>`
                         : ''}

@@ -33,6 +33,7 @@ class Carousel extends Component {
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
 
+    this.descriptionRef = createRef()
     this.calculateDescriptionHeight = this.calculateDescriptionHeight.bind(this)
     this.toggleDescription = this.toggleDescription.bind(this)
   }
@@ -134,8 +135,10 @@ class Carousel extends Component {
   }
 
   calculateDescriptionHeight () {
-    const descriptionBlock = document.querySelector('.lmh-carousel_image.selected .lmh-carousel_caption-description')
+    if (!this.descriptionRef) return
 
+    const descriptionBlock = this.descriptionRef.current
+    
     if (!descriptionBlock) return
 
     const descriptionHeight = descriptionBlock
@@ -176,7 +179,8 @@ class Carousel extends Component {
                             toggleDescription: this.toggleDescription,
                             descriptionOpen: this.state.descriptionOpen,
                             descriptionHeight: this.state.descriptionHeight,
-                            descriptionToggleBtn: this.settings.toggleDescriptionBtn
+                            descriptionToggleBtn: this.settings.toggleDescriptionBtn,
+                            descriptionRef: this.descriptionRef
                           }} />`
                       })}
                 </div>
