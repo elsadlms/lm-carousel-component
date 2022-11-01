@@ -2,6 +2,7 @@ import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
 import { render, Component, createRef } from 'https://unpkg.com/preact?module'
 
 import { CarouselElement } from './CarouselElement.module.js'
+import { FullscreenSymbol } from './FullscreenSymbol.module.js'
 import { ArrowSymbol } from './ArrowSymbol.module.js'
 
 class Carousel extends Component {
@@ -11,7 +12,8 @@ class Carousel extends Component {
     componentWidth: 0,
     carouselWidth: 0,
     translateValue: 0,
-    controlsReady: false
+    controlsReady: false,
+    fullscreen: false
   }
 
   /* * * * * * * * * * * * * * * * * * *
@@ -35,7 +37,10 @@ class Carousel extends Component {
 
     this.componentRef = createRef()
     this.imageWrapperRef = createRef()
+    this.controlsRef = createRef()
     this.titleRef = createRef()
+
+    this.toggleFullscreen = this.toggleFullscreen.bind(this)
 
     this.calculateDimensions = this.calculateDimensions.bind(this)
     this.fixArrowsPosition = this.fixArrowsPosition.bind(this)
@@ -57,7 +62,7 @@ class Carousel extends Component {
 
     setTimeout(this.fixArrowsPosition, 200)
     setTimeout(this.fixArrowsPosition, 500)
-
+    
     this.loadingInterval = setInterval(this.fixArrowsPosition, 1000)
 
     window.addEventListener('resize', this.calculateDimensions)
@@ -73,7 +78,9 @@ class Carousel extends Component {
     if (!this.titleRef) return
 
     const titleDimensions = this.titleRef.current.getBoundingClientRect()
-    const fixed = this.state.arrowsPos > (titleDimensions.height + 50)
+    const imageDimensions = this.imageWrapperRef.current.getBoundingClientRect()
+
+    const fixed = this.state.arrowsPos === (titleDimensions.height + imageDimensions.height / 2)
 
     if (!fixed) {
       this.positionArrows()
@@ -116,9 +123,15 @@ class Carousel extends Component {
 
   getClassList (settings) {
     let classList = ''
+
     classList += settings.imageFit === 'cover'
       ? 'lmh-carousel-story_cover'
       : 'lmh-carousel-story_contain'
+
+    if (this.state.fullscreen) {
+      classList += ' lmh-carousel-story--fullscreen'
+    }
+
     return classList
   }
 
@@ -164,7 +177,9 @@ class Carousel extends Component {
 
     const titleDimensions = this.titleRef.current.getBoundingClientRect()
     const imageDimensions = this.imageWrapperRef.current.getBoundingClientRect()
-    const arrowsPos = titleDimensions.height + imageDimensions.height / 2
+    const arrowsPos = this.state.fullscreen 
+      ? imageDimensions.y + imageDimensions.height / 2
+      : titleDimensions.height + imageDimensions.height / 2
 
     this.setState(curr => ({
       ...curr,
@@ -172,38 +187,56 @@ class Carousel extends Component {
     }))
   }
 
-  calculateCarouselDimensions (images) {
+  calculateDimensions () {
     const componentWidth = this.componentRef.current.getBoundingClientRect().width
-    const carouselWidth = images.length * (componentWidth - 64) + 16
+    const carouselWidth = this.props.images.length * (componentWidth - 64) + 16
 
     this.setState(curr => ({
-      ...curr,
-      componentWidth,
-      carouselWidth
-    }))
+        ...curr,
+        componentWidth,
+        carouselWidth
+      }),
+      this.positionArrows
+    )
   }
 
-  calculateDimensions () {
-    this.calculateCarouselDimensions(this.props.images)
-    this.positionArrows()
+  toggleFullscreen () {
+    this.setState(
+      curr => ({
+        ...curr,
+        fullscreen: !curr.fullscreen
+      }), 
+      this.calculateDimensions
+    )
   }
 
   /* * * * * * * * * * * * * * * * * * *
     * RENDER
     * * * * * * * * * * * * * * * * * * */
   render (props) {
-    const translateValue = this.state.index === 0 ? 0 : this.state.index * (this.state.componentWidth - 64) - 24
+    const titleDimensions = this.titleRef?.current?.getBoundingClientRect()
+    const controlsDimensions = this.controlsRef?.current?.getBoundingClientRect()
+
+    const translateValue = this.state.index === 0 
+      ? 0 
+      : this.state.index * (this.state.componentWidth - 64) - 24
+      
+    const imagesMaxHeight = this.state.fullscreen 
+      ? window.innerHeight - titleDimensions.height - controlsDimensions.height + 'px'
+      : 'unset'
 
     const containerClass = this.getClassList(this.settings)
     const controlsClass = this.state.controlsReady ? 'lmh-carousel-story_controls-visible' : ''
 
     const containerStyle =
-        `--image-height: ${this.settings.imageHeight ? this.settings.imageHeight + 'px' : '1fr'}; background-color: ${this.settings.backgroundColor ? this.settings.backgroundColor : 'var(--dark-grey)'};`
-
+        `--image-height: ${this.settings.imageHeight && !this.state.fullscreen ? this.settings.imageHeight + 'px' : '1fr'}; 
+        background-color: ${this.settings.backgroundColor ? this.settings.backgroundColor : 'var(--dark-grey)'};`
+    
     const imagesContainerStyle =
         `width: ${this.state.carouselWidth}px;
-          transform: translateX(${-translateValue}px);
-          grid-template-columns: repeat(${props.images.length}, 1fr);`
+        height: ${imagesMaxHeight};
+        transform: translateX(${-translateValue}px);
+        grid-template-columns: repeat(${props.images.length}, 1fr);`
 
     return html`
           <div ref=${this.componentRef} class='lmh-carousel-story ${containerClass}' style=${containerStyle}>
@@ -212,6 +245,12 @@ class Carousel extends Component {
                 ? html`<div ref=${this.titleRef} class='lmh-carousel-story_title'>
                           <p>${this.settings.title}</p>
                         </div>`
+                : ''}
+                
+              ${this.settings.fullscreen
+                ? html`<div onclick=${this.toggleFullscreen} class='lmh-carousel-story_btn-fullscreen'>
+                        <${FullscreenSymbol} ...${{ active: this.state.fullscreen }} />
+                      </div>`
                 : ''}
 
               <div class='lmh-carousel-story_images' style=${imagesContainerStyle}>
@@ -229,7 +268,7 @@ class Carousel extends Component {
               </div>
 
               ${this.displayControls
-                ? html`<div class='lmh-carousel-story_controls ${controlsClass}'>
+                ? html`<div ref=${this.controlsRef} class='lmh-carousel-story_controls ${controlsClass}'>
                         ${this.displayDots
                           ? this.renderProgressDots(props.images.length)
                           : ''}

@@ -18,7 +18,6 @@ body {
     --carousel-description-color: #dedede;
     --carousel-dot-size: 8px;
     --carousel-dot-color: #d9d9d9;
-    --carousel-dot-color-selected: var(--grey);
     --carousel-arrow-color: var(--dark-grey);
     --carousel-arrow-color-disabled: #BDC1C8;
     --carousel-arrow-bg: var(--light-grey);
@@ -30,9 +29,36 @@ body {
     position: relative;
 }
 
+.lmh-carousel-story--fullscreen {
+    z-index: 10000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
 .lmh-carousel-story p {
     margin: 0;
     color: #fff;
+}
+
+.lmh-carousel-story_btn-fullscreen {
+    cursor: pointer;
+    position: absolute;
+    height: 24px;
+    top: 20px;
+    right: 16px;
+}
+
+.lmh-carousel-story_btn-fullscreen svg path {
+    fill: #fff;
+    opacity: 0.4;
+    transition: opacity 100ms;
+}
+
+.lmh-carousel-story_btn-fullscreen:hover svg path {
+    opacity: 0.6;
 }
 
 .lmh-carousel-story_title {
