@@ -51,8 +51,8 @@ export class Snippet extends Component {
 
   generateHead (type) {
     const root = type === 'carousel'
-      ? 'https://assets-decodeurs.lemonde.fr/redacweb/elsa-delmas-carousel-test'
-      : 'https://assets-decodeurs.lemonde.fr/redacweb/elsa-delmas-carousel-v2'
+      ? '2210-carousel-default-assets'
+      : '2210-carousel-story-assets'
 
     const output = `
       <link rel="stylesheet" type="text/css" href="https://assets-decodeurs.lemonde.fr/redacweb/statics/styles/reset.css">

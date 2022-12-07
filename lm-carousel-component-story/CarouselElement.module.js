@@ -57,12 +57,12 @@ export class CarouselElement extends Component {
     }
 
     const imageClass =
-      `lmh-carousel_image 
+      `lmh-carousel-story_image 
       ${props.selected ? 'selected' : ''} 
-      ${props.media.imageFit ? 'lmh-carousel_image-' + props.media.imageFit : ''}`
+      ${props.media.imageFit ? 'lmh-carousel-story_image-' + props.media.imageFit : ''}`
 
     return html`
-        <div class="lmh-carousel-story_image ${imageClass}">
+        <div class=${imageClass}>
             <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
                 ${props.media.url.endsWith('.mp4')
                   ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`

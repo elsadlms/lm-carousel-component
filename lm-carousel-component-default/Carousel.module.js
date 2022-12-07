@@ -8,7 +8,6 @@ class Carousel extends Component {
   state = {
     index: 0,
     descriptionOpen: false,
-    descriptionHeight: 20
   }
 
   /* * * * * * * * * * * * * * * * * * *
@@ -33,8 +32,6 @@ class Carousel extends Component {
     this.incrementIndex = this.incrementIndex.bind(this)
     this.decrementIndex = this.decrementIndex.bind(this)
 
-    this.descriptionRef = createRef()
-    this.calculateDescriptionHeight = this.calculateDescriptionHeight.bind(this)
     this.toggleDescription = this.toggleDescription.bind(this)
   }
 
@@ -45,8 +42,6 @@ class Carousel extends Component {
     if (this.settings.loop) {
       this.setLoopTimer(this.loopDuration)
     }
-
-    this.calculateDescriptionHeight()
 
     if (this.settings.toggleDescriptionBtn === false) {
       this.setState(curr => ({
@@ -99,8 +94,8 @@ class Carousel extends Component {
   }
 
   renderArrows ({ leftArrow, rightArrow, index, limit }) {
-    const leftArrowClass = index === 0 ? 'lmh-carousel-story_arrow-disabled' : ''
-    const rightArrowClass = index === limit ? 'lmh-carousel-story_arrow-disabled' : ''
+    const leftArrowClass = index === 0 ? 'lmh-carousel_arrow-disabled' : ''
+    const rightArrowClass = index === limit ? 'lmh-carousel_arrow-disabled' : ''
 
     return html`
             <div  class="lmh-carousel_arrows">
@@ -134,25 +129,7 @@ class Carousel extends Component {
             </div>`
   }
 
-  calculateDescriptionHeight () {
-    if (!this.descriptionRef) return
-
-    const descriptionBlock = this.descriptionRef.current
-    
-    if (!descriptionBlock) return
-
-    const descriptionHeight = descriptionBlock
-      .getBoundingClientRect()
-      .height
-
-    this.setState(curr => ({
-      ...curr,
-      descriptionHeight
-    }))
-  }
-
   toggleDescription () {
-    this.calculateDescriptionHeight()
     this.setState(curr => ({
       ...curr,
       descriptionOpen: !curr.descriptionOpen
@@ -178,9 +155,7 @@ class Carousel extends Component {
                             settings: this.settings,
                             toggleDescription: this.toggleDescription,
                             descriptionOpen: this.state.descriptionOpen,
-                            descriptionHeight: this.state.descriptionHeight,
                             descriptionToggleBtn: this.settings.toggleDescriptionBtn,
-                            descriptionRef: this.descriptionRef
                           }} />`
                       })}
                 </div>

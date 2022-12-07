@@ -1,5 +1,5 @@
 import readPropsNode from './readPropsNode.module.js'
-import initCarousel from './components/Carousel.module.js'
+import initCarousel from './Carousel.module.js'
 
 const carouselElements = [...document.querySelectorAll('.lmh-carousel')]
 
