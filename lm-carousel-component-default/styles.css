@@ -32,8 +32,8 @@ body {
   margin: 0;
 }
 
-.lmh-carousel img, 
-.lmh-carousel video, 
+.lmh-carousel img,
+.lmh-carousel video,
 .lmh-carousel_cover img,
 .lmh-carousel_cover video {
   object-fit: cover;
@@ -107,6 +107,21 @@ body {
   transition: transform 400ms ease-in-out;
 }
 
+.lmh-carousel_caption a {
+  color: unset;
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-decoration-color: unset !important;
+  text-underline-offset: 0.2em;
+  transition: opacity 200ms;
+}
+
+@media screen and (max-width: 800px) {
+  .lmh-carousel_caption a {
+    text-underline-offset: 0em;
+  }
+}
+
 .lmh-carousel_caption-credits {
   font-size: 12px;
   text-transform: uppercase;
@@ -149,7 +164,7 @@ body {
   padding: 0.6em;
 }
 
-.lmh-carousel_controls > div {
+.lmh-carousel_controls>div {
   grid-area: 1 / -1;
 }
 
@@ -190,16 +205,12 @@ body {
   transition: background-color 100ms;
 }
 
-.lmh-carousel_arrow + .lmh-carousel_arrow {
+.lmh-carousel_arrow+.lmh-carousel_arrow {
   margin-left: 0.5em;
 }
 
 .lmh-carousel_arrow .arrow-symbol {
   fill: var(--carousel-arrow-color);
-}
-
-.lmh-carousel_arrow:hover {
-  background-color: var(--carousel-arrow-bg-hover);
 }
 
 .lmh-carousel_arrow.lmh-carousel_arrow-disabled {
@@ -211,4 +222,14 @@ body {
 
 .lmh-carousel_arrow.lmh-carousel_arrow-disabled .arrow-symbol {
   fill: var(--carousel-arrow-color-disabled);
+}
+
+@media (hover: hover) {
+  .lmh-carousel_arrow:hover {
+    background-color: var(--carousel-arrow-bg-hover);
+  }
+
+  .lmh-carousel_caption a:hover {
+    opacity: 0.6;
+  }
 }

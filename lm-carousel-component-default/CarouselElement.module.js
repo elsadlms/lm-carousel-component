@@ -1,6 +1,7 @@
 import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
 import { Component, createRef } from 'https://unpkg.com/preact?module'
 
+import { StrToHtml } from './StrToHtml.module.js'
 import { ToggleSymbol } from './ToggleSymbol.module.js'
 
 export class CarouselElement extends Component {
@@ -116,12 +117,12 @@ export class CarouselElement extends Component {
             : ''}
                       ${credits
             ? html`<div class='lmh-carousel_caption-credits'>
-                          <p>${credits}</p>
+                          <${StrToHtml}  ...${{ content: credits }}/>
                         </div>`
             : ''}
                       ${description
             ? html`<div ref=${this.descriptionRef} class='lmh-carousel_caption-description ${descriptionClass}'>
-                          <p>${description}</p>
+                          <${StrToHtml}  ...${{ content: description }}/>
                         </div>`
             : ''}
                   </div>`

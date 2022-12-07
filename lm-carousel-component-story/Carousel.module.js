@@ -4,6 +4,7 @@ import { render, Component, createRef } from 'https://unpkg.com/preact?module'
 import { CarouselElement } from './CarouselElement.module.js'
 import { FullscreenSymbol } from './FullscreenSymbol.module.js'
 import { ArrowSymbol } from './ArrowSymbol.module.js'
+import { StrToHtml } from './StrToHtml.module.js'
 
 class Carousel extends Component {
   state = {
@@ -243,7 +244,7 @@ class Carousel extends Component {
               
               ${this.settings.title
                 ? html`<div ref=${this.titleRef} class='lmh-carousel-story_title'>
-                          <p>${this.settings.title}</p>
+                          <${StrToHtml}  ...${{ content: this.settings.title }}/>
                         </div>`
                 : ''}
                 

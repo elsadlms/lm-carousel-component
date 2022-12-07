@@ -1,8 +1,10 @@
 import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
 import { Component, createRef } from 'https://unpkg.com/preact?module'
 
+import { StrToHtml } from './StrToHtml.module.js'
+
 export class CarouselElement extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if (props.media.url.endsWith('.mp4')) {
@@ -13,7 +15,7 @@ export class CarouselElement extends Component {
     this.toggleVideo = this.toggleVideo.bind(this)
   }
 
-  toggleVideo () {
+  toggleVideo() {
     if (!this.props.selected) {
       return
     }
@@ -25,7 +27,7 @@ export class CarouselElement extends Component {
     }
   }
 
-  render (props) {
+  render(props) {
     if (props.media.url.endsWith('.mp4') && this.video.current) {
       // on lance automatiquement la vidéo si on arrive dessus
       if (props.selected && !this.lastSelected) {
@@ -65,15 +67,15 @@ export class CarouselElement extends Component {
         <div class=${imageClass}>
             <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
                 ${props.media.url.endsWith('.mp4')
-                  ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
-                  : html`<img src="${mediaURL}"/>`}
+        ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
+        : html`<img src="${mediaURL}"/>`}
             </div>
             ${displayCaption
-              ? html`<div class="lmh-carousel-story_caption">
-                      ${description ? html`<div class="lmh-carousel-story_caption-description"><p>${description}</p></div>` : ''}
-                      ${credits ? html`<div class="lmh-carousel-story_caption-credits"><p>${credits}</p></div>` : ''}
+        ? html`<div class="lmh-carousel-story_caption">
+                      ${description ? html`<div class="lmh-carousel-story_caption-description"><${StrToHtml}  ...${{ content: description }}/></div>` : ''}
+                      ${credits ? html`<div class="lmh-carousel-story_caption-credits"><${StrToHtml}  ...${{ content: credits }}/></div>` : ''}
                   </div>`
-              : ''}
+        : ''}
         </div>            
     `
   }
