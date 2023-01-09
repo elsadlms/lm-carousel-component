@@ -84,7 +84,6 @@ body {
   overflow-x: scroll;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  scroll-padding: 16px;
 }
 
 .lmh-carousel-story_scrollable::-webkit-scrollbar {
@@ -117,7 +116,15 @@ body {
 .lmh-carousel-story_image-wrapper {
   height: 100%;
   background-color: #000;
+  scroll-snap-align: center;
+}
+
+.lmh-carousel-story_image:first-child {
   scroll-snap-align: start;
+}
+
+.lmh-carousel-story_image:last-child {
+  scroll-snap-align: end;
 }
 
 .lmh-carousel-story_image img,

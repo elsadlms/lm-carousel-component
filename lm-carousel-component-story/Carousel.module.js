@@ -77,8 +77,9 @@ class Carousel extends Component {
     // si c'est pas déjà fait, on récupère les breakpoints du scroll snap
     if (this.scrollBreakpoints.length === 0) {
       for (let i = 0; i < this.props.images.length; i++) {
-        let value = i * (this.state.componentWidth - 64)
-        if (i === this.props.images.length - 1) value -= 48
+        let value = i * (this.state.componentWidth - 64) - 24
+        if (i === 0) value = 0
+        if (i === this.props.images.length - 1) value -= 24
         this.scrollBreakpoints.push(value)
       }
     }
