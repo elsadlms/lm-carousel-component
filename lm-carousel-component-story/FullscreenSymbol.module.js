@@ -1,5 +1,5 @@
-import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
-import { Component } from 'https://unpkg.com/preact?module'
+import { html } from './lib/htm.js'
+import { Component } from './lib/preact.js'
 
 export class FullscreenSymbol extends Component {
   render ({ active }) {

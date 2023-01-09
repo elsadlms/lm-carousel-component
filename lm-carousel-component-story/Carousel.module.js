@@ -1,5 +1,5 @@
-import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
-import { render, Component, createRef } from 'https://unpkg.com/preact?module'
+import { html } from './lib/htm.js'
+import { render, Component, createRef } from './lib/preact.js'
 
 import { CarouselElement } from './CarouselElement.module.js'
 import { FullscreenSymbol } from './FullscreenSymbol.module.js'
@@ -36,13 +36,17 @@ class Carousel extends Component {
     this.defaultLoopDuration = 2000
     this.loopDuration = Number.isInteger(this.settings.duration) ? this.settings.duration : this.defaultLoopDuration
 
+    this.scrollableRef = createRef()
     this.componentRef = createRef()
     this.imageWrapperRef = createRef()
     this.controlsRef = createRef()
     this.titleRef = createRef()
 
+    this.scrollBreakpoints = []
+
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
 
+    this.handleScroll = this.handleScroll.bind(this)
     this.calculateDimensions = this.calculateDimensions.bind(this)
     this.fixArrowsPosition = this.fixArrowsPosition.bind(this)
     this.positionArrows = this.positionArrows.bind(this)
@@ -63,15 +67,49 @@ class Carousel extends Component {
 
     setTimeout(this.fixArrowsPosition, 200)
     setTimeout(this.fixArrowsPosition, 500)
-    
+
     this.loadingInterval = setInterval(this.fixArrowsPosition, 1000)
 
     window.addEventListener('resize', this.calculateDimensions)
   }
 
+  componentDidUpdate () {
+    // si c'est pas déjà fait, on récupère les breakpoints du scroll snap
+    if (this.scrollBreakpoints.length === 0) {
+      for (let i = 0; i < this.props.images.length; i++) {
+        let value = i * (this.state.componentWidth - 64)
+        if (i === this.props.images.length - 1) value -= 48
+        this.scrollBreakpoints.push(value)
+      }
+    }
+
+    if (!this.scrollableRef.current) return
+
+    // on update le scroll par rapport au nouvel index
+    const translateValue = this.state.index === 0
+      ? 0
+      : this.state.index * (this.state.componentWidth - 64) - 24
+
+    this.scrollableRef.current.scrollLeft = translateValue
+  }
+
   componentWillUnmount () {
     if (this.loopTimer) {
       clearInterval(this.loopTimer)
+    }
+  }
+
+  handleScroll () {
+    // si on s'arrête sur un breakpoint au scroll, on re-update l'index au cas où
+    const scrollValue = this.scrollableRef.current.scrollLeft
+
+    let snappedIndex = this.scrollBreakpoints.findIndex(breakpoint => breakpoint === scrollValue)
+
+    if (snappedIndex != -1) {
+      this.setState(curr => ({
+        ...curr,
+        index: snappedIndex
+      }))
     }
   }
 
@@ -218,10 +256,6 @@ class Carousel extends Component {
     const titleDimensions = this.titleRef?.current?.getBoundingClientRect()
     const controlsDimensions = this.controlsRef?.current?.getBoundingClientRect()
 
-    const translateValue = this.state.index === 0 
-      ? 0 
-      : this.state.index * (this.state.componentWidth - 64) - 24
-      
     const imagesMaxHeight = this.state.fullscreen 
       ? window.innerHeight - titleDimensions.height - controlsDimensions.height + 'px'
       : 'unset'
@@ -236,7 +270,6 @@ class Carousel extends Component {
     const imagesContainerStyle =
         `width: ${this.state.carouselWidth}px;
         height: ${imagesMaxHeight};
-        transform: translateX(${-translateValue}px);
         grid-template-columns: repeat(${props.images.length}, 1fr);`
 
     return html`
@@ -254,7 +287,9 @@ class Carousel extends Component {
                       </div>`
                 : ''}
 
-              <div class='lmh-carousel-story_images' style=${imagesContainerStyle}>
+              <div ref=${this.scrollableRef} onScroll=${this.handleScroll} class='lmh-carousel-story_scrollable'>
+
+                <div class='lmh-carousel-story_images' style=${imagesContainerStyle}>
 
                   ${props.images.map((media, i) => {
                     return html`<${CarouselElement} 
@@ -265,6 +300,8 @@ class Carousel extends Component {
                           imageWrapperRef: this.imageWrapperRef,
                       }} />`
                     })}
+
+                </div>
 
               </div>
 
