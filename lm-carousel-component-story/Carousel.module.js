@@ -9,6 +9,7 @@ import { StrToHtml } from './StrToHtml.module.js'
 class Carousel extends Component {
   state = {
     index: 0,
+    visibleIndex: 0,
     arrowsPos: 0,
     componentWidth: 0,
     carouselWidth: 0,
@@ -20,7 +21,7 @@ class Carousel extends Component {
   /* * * * * * * * * * * * * * * * * * *
     * CONSTRUCTOR
     * * * * * * * * * * * * * * * * * * */
-  constructor (props) {
+  constructor(props) {
     console.log(props)
     super(props)
 
@@ -41,8 +42,10 @@ class Carousel extends Component {
     this.imageWrapperRef = createRef()
     this.controlsRef = createRef()
     this.titleRef = createRef()
+    this.targetIndex = null
 
     this.scrollBreakpoints = []
+    this.indexThreshold = 0
 
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
 
@@ -58,7 +61,7 @@ class Carousel extends Component {
   /* * * * * * * * * * * * * * * * * * *
     * METHODS
     * * * * * * * * * * * * * * * * * * */
-  componentDidMount () {
+  componentDidMount() {
     if (this.settings.loop) {
       this.setLoopTimer(this.loopDuration)
     }
@@ -73,38 +76,45 @@ class Carousel extends Component {
     window.addEventListener('resize', this.calculateDimensions)
   }
 
-  componentDidUpdate () {
-    if (!this.scrollableRef.current) return
-
-    // on update le scroll par rapport au nouvel index
-    const translateValue = this.state.index === 0
-      ? 0
-      : this.state.index * (this.state.componentWidth - 64) - 24
-
-    this.scrollableRef.current.scrollLeft = translateValue
-  }
-
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.loopTimer) {
       clearInterval(this.loopTimer)
     }
   }
 
-  handleScroll () {
+  handleScroll() {
     // si on s'arrête sur un breakpoint au scroll, on re-update l'index au cas où
     const scrollValue = this.scrollableRef.current.scrollLeft
+
+    let newVisibleIndex = [...this.scrollBreakpoints].filter(breakpoint => breakpoint < (scrollValue - this.indexThreshold)).length
+
+    if (newVisibleIndex != this.state.visibleIndex) {      
+      this.setState(curr => ({
+        ...curr,
+        visibleIndex: newVisibleIndex
+      }))
+    }
 
     let snappedIndex = this.scrollBreakpoints.findIndex(breakpoint => breakpoint === scrollValue)
 
     if (snappedIndex != -1) {
+      // si on est juste en scroll auto à partir d'un clic sur un point, on s'arrête
+      if (this.targetIndex != null && snappedIndex != this.targetIndex) {
+        return
+      }
+
+      // si on est arrivé sur le bon index, on peut clean targetIndex
+      this.targetIndex = null
+
       this.setState(curr => ({
         ...curr,
-        index: snappedIndex
+        index: snappedIndex,
+        translateValue: scrollValue,
       }))
     }
   }
 
-  fixArrowsPosition () {
+  fixArrowsPosition() {
     if (!this.titleRef) return
 
     const titleDimensions = this.titleRef.current.getBoundingClientRect()
@@ -123,35 +133,44 @@ class Carousel extends Component {
     }
   }
 
-  setLoopTimer (duration) {
+  setLoopTimer(duration) {
     this.loopTimer = setInterval(() => {
       this.incrementIndex()
     }, duration)
   }
 
-  setIndex (number) {
+  setIndex(number) {
     if (this.loopTimer) {
       clearInterval(this.loopTimer)
       this.setLoopTimer(this.loopDuration)
     }
 
+    this.targetIndex = number
+
+    const translateValue = number === 0
+      ? 0
+      : number * (this.state.componentWidth - 64) - 24
+
+    this.scrollableRef.current.scrollLeft = translateValue
+
     this.setState(curr => ({
       ...curr,
-      index: number
+      index: number,
+      translateValue,
     }))
   }
 
-  incrementIndex () {
+  incrementIndex() {
     const nextIndex = this.state.index === this.props.images.length - 1 ? 0 : this.state.index + 1
     this.setIndex(nextIndex)
   }
 
-  decrementIndex () {
+  decrementIndex() {
     const prevIndex = this.state.index === 0 ? this.props.images.length - 1 : this.state.index - 1
     this.setIndex(prevIndex)
   }
 
-  getClassList (settings) {
+  getClassList(settings) {
     let classList = ''
 
     classList += settings.imageFit === 'cover'
@@ -165,7 +184,7 @@ class Carousel extends Component {
     return classList
   }
 
-  renderArrows ({ leftArrow, rightArrow, index, limit, top }) {
+  renderArrows({ leftArrow, rightArrow, index, limit, top }) {
     const leftArrowClass = index === 0 ? 'lmh-carousel-story_arrow-disabled' : ''
     const rightArrowClass = index === limit ? 'lmh-carousel-story_arrow-disabled' : ''
 
@@ -173,41 +192,41 @@ class Carousel extends Component {
         <div  class='lmh-carousel-story_arrows' style='top: ${top}px'>
             
             ${leftArrow
-              ? html`<div class='lmh-carousel-story_arrow ${leftArrowClass}' onclick='${this.decrementIndex}'>
+        ? html`<div class='lmh-carousel-story_arrow ${leftArrowClass}' onclick='${this.decrementIndex}'>
                   <${ArrowSymbol}  ...${{ pointing: 'left' }} />
                 </div>`
-              : ''}
+        : ''}
 
             ${rightArrow
-              ? html`<div class='lmh-carousel-story_arrow ${rightArrowClass}' onclick='${this.incrementIndex}'>
+        ? html`<div class='lmh-carousel-story_arrow ${rightArrowClass}' onclick='${this.incrementIndex}'>
                   <${ArrowSymbol} />
                 </div>`
-              : ''}
+        : ''}
 
         </div>
     `
   }
 
-  renderProgressDots (total) {
+  renderProgressDots(total) {
     return html`
         <div class='lmh-carousel-story_progress-dots'>
             ${[...Array(total)].map((_el, i) => {
-                return html`
+      return html`
                   <span 
                     onclick='${() => this.setIndex(i)}' 
                     class='lmh-carousel-story_progress-dot ${this.state.index === i ? 'selected' : ''}'>
                   </span>`
-              })}
+    })}
         </div>`
   }
 
-  positionArrows () {
+  positionArrows() {
     if (!this.titleRef) return
     if (!this.imageWrapperRef) return
 
     const titleDimensions = this.titleRef.current.getBoundingClientRect()
     const imageDimensions = this.imageWrapperRef.current.getBoundingClientRect()
-    const arrowsPos = this.state.fullscreen 
+    const arrowsPos = this.state.fullscreen
       ? imageDimensions.y + imageDimensions.height / 2
       : titleDimensions.height + imageDimensions.height / 2
 
@@ -217,7 +236,7 @@ class Carousel extends Component {
     }))
   }
 
-  calculateDimensions () {
+  calculateDimensions() {
     const componentWidth = this.componentRef.current.getBoundingClientRect().width
     const carouselWidth = this.props.images.length * (componentWidth - 64) + 16
 
@@ -232,23 +251,23 @@ class Carousel extends Component {
       }
     }
 
-    console.log(this.scrollBreakpoints)
+    this.indexThreshold = this.scrollBreakpoints[1] / 2 
 
     this.setState(curr => ({
-        ...curr,
-        componentWidth,
-        carouselWidth
-      }),
+      ...curr,
+      componentWidth,
+      carouselWidth
+    }),
       this.positionArrows
     )
   }
 
-  toggleFullscreen () {
+  toggleFullscreen() {
     this.setState(
       curr => ({
         ...curr,
         fullscreen: !curr.fullscreen
-      }), 
+      }),
       this.calculateDimensions
     )
   }
@@ -256,11 +275,11 @@ class Carousel extends Component {
   /* * * * * * * * * * * * * * * * * * *
     * RENDER
     * * * * * * * * * * * * * * * * * * */
-  render (props) {
+  render(props) {
     const titleDimensions = this.titleRef?.current?.getBoundingClientRect()
     const controlsDimensions = this.controlsRef?.current?.getBoundingClientRect()
 
-    const imagesMaxHeight = this.state.fullscreen 
+    const imagesMaxHeight = this.state.fullscreen
       ? window.innerHeight - titleDimensions.height - controlsDimensions.height + 'px'
       : 'unset'
 
@@ -268,11 +287,11 @@ class Carousel extends Component {
     const controlsClass = this.state.controlsReady ? 'lmh-carousel-story_controls-visible' : ''
 
     const containerStyle =
-        `--image-height: ${this.settings.imageHeight && !this.state.fullscreen ? this.settings.imageHeight + 'px' : '1fr'}; 
+      `--image-height: ${this.settings.imageHeight && !this.state.fullscreen ? this.settings.imageHeight + 'px' : '1fr'}; 
         background-color: ${this.settings.backgroundColor ? this.settings.backgroundColor : 'var(--dark-grey)'};`
-    
+
     const imagesContainerStyle =
-        `width: ${this.state.carouselWidth}px;
+      `width: ${this.state.carouselWidth}px;
         height: ${imagesMaxHeight};
         grid-template-columns: repeat(${props.images.length}, 1fr);`
 
@@ -280,51 +299,52 @@ class Carousel extends Component {
           <div ref=${this.componentRef} class='lmh-carousel-story ${containerClass}' style=${containerStyle}>
               
               ${this.settings.title
-                ? html`<div ref=${this.titleRef} class='lmh-carousel-story_title'>
+        ? html`<div ref=${this.titleRef} class='lmh-carousel-story_title'>
                           <${StrToHtml}  ...${{ content: this.settings.title }}/>
                         </div>`
-                : ''}
+        : ''}
                 
               ${this.settings.fullscreen
-                ? html`<div onclick=${this.toggleFullscreen} class='lmh-carousel-story_btn-fullscreen'>
+        ? html`<div onclick=${this.toggleFullscreen} class='lmh-carousel-story_btn-fullscreen'>
                         <${FullscreenSymbol} ...${{ active: this.state.fullscreen }} />
                       </div>`
-                : ''}
+        : ''}
 
               <div ref=${this.scrollableRef} onScroll=${this.handleScroll} class='lmh-carousel-story_scrollable'>
 
                 <div class='lmh-carousel-story_images' style=${imagesContainerStyle}>
 
                   ${props.images.map((media, i) => {
-                    return html`<${CarouselElement} 
+          return html`<${CarouselElement} 
                       ...${{
-                          media,
-                          selected: this.state.index === i,
-                          settings: this.settings,
-                          imageWrapperRef: this.imageWrapperRef,
-                      }} />`
-                    })}
+              media,
+              visible: this.state.visibleIndex === i,
+              selected: this.state.index === i,
+              settings: this.settings,
+              imageWrapperRef: this.imageWrapperRef,
+            }} />`
+        })}
 
                 </div>
 
               </div>
 
               ${this.displayControls
-                ? html`<div ref=${this.controlsRef} class='lmh-carousel-story_controls ${controlsClass}'>
+        ? html`<div ref=${this.controlsRef} class='lmh-carousel-story_controls ${controlsClass}'>
                         ${this.displayDots
-                          ? this.renderProgressDots(props.images.length)
-                          : ''}
+            ? this.renderProgressDots(props.images.length)
+            : ''}
                         ${this.displayArrows
-                          ? this.renderArrows({
-                                leftArrow: this.settings.leftArrow,
-                                rightArrow: this.settings.rightArrow,
-                                index: this.state.index,
-                                limit: props.images.length - 1,
-                                top: this.state.arrowsPos
-                              })
-                          : ''}    
+            ? this.renderArrows({
+              leftArrow: this.settings.leftArrow,
+              rightArrow: this.settings.rightArrow,
+              index: this.state.index,
+              limit: props.images.length - 1,
+              top: this.state.arrowsPos
+            })
+            : ''}    
                     </div>`
-                : ''}
+        : ''}
 
           </div>
       `
@@ -332,7 +352,7 @@ class Carousel extends Component {
 }
 
 // renderer
-export default async function renderer (node, props) {
+export default async function renderer(node, props) {
   // await injectStyles('{{PARENT_URL}}/styles.css')
   render(html`<${Carousel} ...${props} />`, node)
 }

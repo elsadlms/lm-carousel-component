@@ -60,7 +60,8 @@ export class CarouselElement extends Component {
 
     const imageClass =
       `lmh-carousel-story_image 
-      ${props.selected ? 'selected' : ''} 
+      ${props.selected ? 'lmh-carousel-story_image--selected' : ''} 
+      ${props.visible ? 'lmh-carousel-story_image--visible' : ''} 
       ${props.media.imageFit ? 'lmh-carousel-story_image-' + props.media.imageFit : ''}`
 
     return html`

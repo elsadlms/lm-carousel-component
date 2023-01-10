@@ -109,7 +109,8 @@ body {
   transition: opacity 1000ms;
 }
 
-.lmh-carousel-story_image.selected>* {
+.lmh-carousel-story_image.lmh-carousel-story_image--visible>*,
+.lmh-carousel-story_image.lmh-carousel-story_image--selected>* {
   opacity: 1;
 }
 
