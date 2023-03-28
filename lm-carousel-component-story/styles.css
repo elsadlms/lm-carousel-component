@@ -2,10 +2,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  --ff-marr-sans: "Marr-Sans", Helvetica, Arial, Roboto, sans-serif;
-}
-
 body {
   margin: 0 auto;
 }
@@ -14,16 +10,23 @@ body {
   --light-grey: #E8EAEE;
   --grey: #A4A9B4;
   --dark-grey: #2A303C;
-  --carousel-credits-color: #a2a9ae;
-  --carousel-description-color: #dedede;
+
+  --carousel-bg-color: var(--dark-grey);
+  --carousel-title-color: rgba(255, 255, 255, 1);;
+  --carousel-description-color: rgba(255, 255, 255, 0.9);
+  --carousel-credits-color: rgba(255, 255, 255, 0.5);
   --carousel-dot-size: 8px;
-  --carousel-dot-color: #d9d9d9;
-  --carousel-arrow-color: var(--dark-grey);
-  --carousel-arrow-color-disabled: #BDC1C8;
+  --carousel-dot-color: rgba(255, 255, 255, 0.8);
+  --carousel-arrow-color: var(--carousel-bg-color);
+  --carousel-arrow-color-disabled: rgba(255, 255, 255, 0.5);
   --carousel-arrow-bg: var(--light-grey);
   --carousel-arrow-bg-hover: var(--grey);
-  --image-height: 1fr;
-  background-color: var(--dark-grey);
+  --carousel-image-bg: #000;
+  --carousel-image-height: 1fr;
+  --carousel-scrollable-padding: 32px;
+  --carousel-gap-value: 16px;
+
+  background-color: var(--carousel-bg-color);
   font-family: var(--ff-marr-sans);
   overflow: hidden;
   position: relative;
@@ -49,6 +52,7 @@ body {
   height: 24px;
   top: 20px;
   right: 16px;
+  z-index: 2;
 }
 
 .lmh-carousel-story_btn-fullscreen svg path {
@@ -66,6 +70,7 @@ body {
   font-size: 20px;
   line-height: 24px;
   padding: 20px 32px 16px 16px;
+  color: var(--carousel-title-color);
 }
 
 .lmh-carousel-story img,
@@ -92,10 +97,11 @@ body {
 
 .lmh-carousel-story_images {
   display: grid;
-  grid-template-rows: minmax(0, var(--image-height)) auto;
+  grid-template-rows: minmax(0, var(--carousel-image-height)) auto;
   grid-auto-flow: column;
-  padding: 0 16px;
-  grid-gap: 16px;
+  padding: 0 var(--carousel-scrollable-padding);
+  padding-bottom: 0;
+  grid-gap: var(--carousel-gap-value);
   grid-auto-flow: column;
   position: relative;
 }
@@ -116,8 +122,11 @@ body {
 
 .lmh-carousel-story_image-wrapper {
   height: 100%;
-  background-color: #000;
+  background-color: var(--carousel-image-bg);
   scroll-snap-align: center;
+  font-size: 0;
+
+  position: relative;
 }
 
 .lmh-carousel-story_image:first-child {
@@ -168,17 +177,19 @@ body {
   padding-top: 0.33rem;
   font-size: 12px;
   text-transform: uppercase;
-  opacity: 0.4;
+  color: var(--carousel-credits-color);
 }
 
 .lmh-carousel-story_caption-description {
   font-weight: 500;
   font-size: 14px;
+  color: var(--carousel-description-color);
 }
 
 .lmh-carousel-story_progress-dots {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 16px 0;
 }
 
@@ -194,27 +205,22 @@ body {
   opacity: 0.4;
 }
 
-.lmh-carousel-story_progress-dot.selected {
+.lmh-carousel-story_progress-dot.lmh-carousel-story_progress-dot--selected {
   opacity: 1;
 }
 
 .lmh-carousel-story_controls {
+  display: grid;
   opacity: 0;
   transition: opacity 600ms;
 }
 
-.lmh-carousel-story_controls.lmh-carousel-story_controls-visible {
-  opacity: 1;
+.lmh-carousel-story_controls>div {
+  grid-area: 1 / -1;
 }
 
-.lmh-carousel-story_arrows {
-  position: absolute;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0 16px;
+.lmh-carousel-story_controls.lmh-carousel-story_controls-visible {
+  opacity: 1;
 }
 
 .lmh-carousel-story_arrow {
@@ -233,13 +239,40 @@ body {
   fill: var(--carousel-arrow-color);
 }
 
-.lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled {
-  opacity: 0;
-  pointer-events: none;
-}
-
 .lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled .arrow-symbol {
   fill: var(--carousel-arrow-color-disabled);
+}
+
+.lmh-carousel-story_arrows-center .lmh-carousel-story_arrows {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 16px;
+}
+
+.lmh-carousel-story_arrows-center .lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled {
+  opacity: 0;
+}
+
+.lmh-carousel-story_arrows-bottom .lmh-carousel-story_arrows {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px;
+}
+
+.lmh-carousel-story_arrows-bottom .lmh-carousel-story_arrow+.lmh-carousel-story_arrow {
+  margin-left: 0.5em;
+}
+
+.lmh-carousel-story_arrows-bottom .lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled {
+  background-color: transparent;
+  border: 1px solid var(--carousel-arrow-color-disabled);
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 @media (hover: hover) {

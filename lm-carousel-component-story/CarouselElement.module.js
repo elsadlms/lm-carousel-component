@@ -7,7 +7,7 @@ export class CarouselElement extends Component {
   constructor(props) {
     super(props)
 
-    if (props.media.url.endsWith('.mp4')) {
+    if (props.media.url?.endsWith('.mp4')) {
       this.video = createRef()
     }
 
@@ -28,7 +28,7 @@ export class CarouselElement extends Component {
   }
 
   render(props) {
-    if (props.media.url.endsWith('.mp4') && this.video.current) {
+    if (props.media.url?.endsWith('.mp4') && this.video.current) {
       // on lance automatiquement la vidéo si on arrive dessus
       if (props.selected && !this.lastSelected) {
         this.video.current.play()
@@ -58,21 +58,20 @@ export class CarouselElement extends Component {
       mediaURL = props.media.mobileUrl
     }
 
-    const imageClass =
-      `lmh-carousel-story_image 
-      ${props.selected ? 'lmh-carousel-story_image--selected' : ''} 
-      ${props.visible ? 'lmh-carousel-story_image--visible' : ''} 
-      ${props.media.imageFit ? 'lmh-carousel-story_image-' + props.media.imageFit : ''}`
+    const imageClasses = ['lmh-carousel-story_image']
+    if (props.selected) imageClasses.push('lmh-carousel-story_image--selected')
+    if (props.visible) imageClasses.push('lmh-carousel-story_image--visible')
+    if (props.media.imageFit) imageClasses.push(`lmh-carousel-story_image-${props.media.imageFit}`)
 
     return html`
-        <div class=${imageClass}>
+        <div class=${imageClasses.join(' ')}>
             <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
-                ${props.media.url.endsWith('.mp4')
+                ${props.media.url?.endsWith('.mp4')
         ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
         : html`<img src="${mediaURL}"/>`}
             </div>
             ${displayCaption
-        ? html`<div class="lmh-carousel-story_caption">
+        ? html`<div ref=${props.imageCaptionRef} class="lmh-carousel-story_caption">
                       ${description ? html`<div class="lmh-carousel-story_caption-description"><${StrToHtml}  ...${{ content: description }}/></div>` : ''}
                       ${credits ? html`<div class="lmh-carousel-story_caption-credits"><${StrToHtml}  ...${{ content: credits }}/></div>` : ''}
                   </div>`
