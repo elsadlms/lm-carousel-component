@@ -71,11 +71,11 @@ export class CarouselElement extends Component {
         : html`<img src="${mediaURL}"/>`}
             </div>
             ${displayCaption
-        ? html`<div ref=${props.imageCaptionRef} class="lmh-carousel-story_caption">
+        ? html`<div class="lmh-carousel-story_caption">
                       ${description ? html`<div class="lmh-carousel-story_caption-description"><${StrToHtml}  ...${{ content: description }}/></div>` : ''}
                       ${credits ? html`<div class="lmh-carousel-story_caption-credits"><${StrToHtml}  ...${{ content: credits }}/></div>` : ''}
                   </div>`
-        : ''}
+        : html`<div></div>`}
         </div>            
     `
   }
