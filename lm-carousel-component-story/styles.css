@@ -23,7 +23,6 @@ body {
   --carousel-arrow-bg-hover: var(--grey);
   --carousel-image-bg: #000;
   --carousel-image-height: 1fr;
-  --carousel-scrollable-padding: 32px;
   --carousel-gap-value: 16px;
 
   background-color: var(--carousel-bg-color);
@@ -99,8 +98,7 @@ body {
   display: grid;
   grid-template-rows: minmax(0, var(--carousel-image-height)) auto;
   grid-auto-flow: column;
-  padding: 0 var(--carousel-scrollable-padding);
-  padding-bottom: 0;
+  padding: 0 var(--carousel-gap-value);
   grid-gap: var(--carousel-gap-value);
   grid-auto-flow: column;
   position: relative;
@@ -125,8 +123,6 @@ body {
   background-color: var(--carousel-image-bg);
   scroll-snap-align: center;
   font-size: 0;
-
-  position: relative;
 }
 
 .lmh-carousel-story_image:first-child {

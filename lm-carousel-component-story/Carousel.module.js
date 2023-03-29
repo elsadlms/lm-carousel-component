@@ -47,6 +47,8 @@ class Carousel extends Component {
     this.scrollBreakpoints = []
     this.indexThreshold = 0
 
+    this.gapValue = this.settings.gapValue ?? 16
+
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
 
     this.handleScroll = this.handleScroll.bind(this)
@@ -153,7 +155,7 @@ class Carousel extends Component {
 
     const translateValue = number === 0
       ? 0
-      : number * (this.state.componentWidth - 64) - 24
+      : number * (this.state.componentWidth - this.gapValue*4) - this.gapValue*1.5
 
     this.scrollableRef.current.scrollLeft = translateValue
 
@@ -262,15 +264,15 @@ class Carousel extends Component {
 
   calculateDimensions() {
     const componentWidth = this.componentRef.current.getBoundingClientRect().width
-    const carouselWidth = this.props.images.length * (componentWidth - 64) + 16
+    const carouselWidth = this.props.images.length * (componentWidth - this.gapValue*4) + this.gapValue
 
     // on calcule les breakpoints du scroll snap
     if (componentWidth > 0) {
       this.scrollBreakpoints = []
       for (let i = 0; i < this.props.images.length; i++) {
-        let value = i * (componentWidth - 64) - 24
+        let value = i * (componentWidth - this.gapValue*4) - this.gapValue*1.5
         if (i === 0) value = 0
-        if (i === this.props.images.length - 1) value -= 24
+        if (i === this.props.images.length - 1) value -= this.gapValue*1.5
         this.scrollBreakpoints.push(value)
       }
     }
@@ -316,6 +318,7 @@ class Carousel extends Component {
     if (this.state.controlsReady) controlsClasses.push('lmh-carousel-story_controls-visible')
 
     const containerStyle = `
+      --carousel-gap-value: ${this.gapValue}px;
       ${this.settings.backgroundColor ? `--carousel-bg-color: ${this.settings.backgroundColor}` : ''};
       ${this.settings.titleColor ? `--carousel-title-color: ${this.settings.titleColor}` : ''};
       ${this.settings.descriptionColor ? `--carousel-description-color: ${this.settings.descriptionColor}` : ''};
@@ -326,7 +329,7 @@ class Carousel extends Component {
       ${this.settings.arrowBackgroundColor ? `--carousel-arrow-bg: ${this.settings.arrowBackgroundColor}` : ''};
       ${this.settings.arrowBackgroundColorHover ? `--carousel-arrow-bg-hover: ${this.settings.arrowBackgroundColorHover}` : ''};
       ${this.settings.imageBackground ? `--carousel-image-bg: ${this.settings.imageBackground}` : ''};
-      ${this.settings.imageHeight && !this.state.fullscreen ? `--carousel-image-height: ${this.settings.imageHeight}` : ''};
+      ${this.settings.imageHeight && !this.state.fullscreen ? `--carousel-image-height: ${this.settings.imageHeight}px` : ''};
     `
 
     const imagesContainerStyle = `
