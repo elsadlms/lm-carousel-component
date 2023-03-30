@@ -68,7 +68,7 @@ export class CarouselElement extends Component {
             <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
                 ${props.media.url?.endsWith('.mp4')
         ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
-        : html`<img src="${mediaURL}"/>`}
+        : (props.media.url ? html`<img src="${mediaURL}"/>` : '')}
             </div>
             ${displayCaption
         ? html`<div class="lmh-carousel-story_caption">

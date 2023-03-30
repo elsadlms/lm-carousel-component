@@ -48,6 +48,7 @@ class Carousel extends Component {
     this.indexThreshold = 0
 
     this.gapValue = this.settings.gapValue ?? 16
+    this.paddingValue = this.gapValue * 2.5
 
     this.toggleFullscreen = this.toggleFullscreen.bind(this)
 
@@ -264,15 +265,15 @@ class Carousel extends Component {
 
   calculateDimensions() {
     const componentWidth = this.componentRef.current.getBoundingClientRect().width
-    const carouselWidth = this.props.images.length * (componentWidth - this.gapValue*4) + this.gapValue
+    const elementWidth = componentWidth - this.gapValue*4
+    const carouselWidth = this.props.images.length * elementWidth - this.gapValue + this.paddingValue*2
 
     // on calcule les breakpoints du scroll snap
     if (componentWidth > 0) {
       this.scrollBreakpoints = []
       for (let i = 0; i < this.props.images.length; i++) {
-        let value = i * (componentWidth - this.gapValue*4) - this.gapValue*1.5
+        let value = this.paddingValue + i * elementWidth - this.gapValue*2.5
         if (i === 0) value = 0
-        if (i === this.props.images.length - 1) value -= this.gapValue*1.5
         this.scrollBreakpoints.push(value)
       }
     }
@@ -319,6 +320,7 @@ class Carousel extends Component {
 
     const containerStyle = `
       --carousel-gap-value: ${this.gapValue}px;
+      --carousel-padding-value: ${this.paddingValue}px;
       ${this.settings.backgroundColor ? `--carousel-bg-color: ${this.settings.backgroundColor}` : ''};
       ${this.settings.titleColor ? `--carousel-title-color: ${this.settings.titleColor}` : ''};
       ${this.settings.descriptionColor ? `--carousel-description-color: ${this.settings.descriptionColor}` : ''};

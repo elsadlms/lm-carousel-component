@@ -12,7 +12,7 @@ body {
   --dark-grey: #2A303C;
 
   --carousel-bg-color: var(--dark-grey);
-  --carousel-title-color: rgba(255, 255, 255, 1);;
+  --carousel-title-color: rgba(255, 255, 255, 1);
   --carousel-description-color: rgba(255, 255, 255, 0.9);
   --carousel-credits-color: rgba(255, 255, 255, 0.5);
   --carousel-dot-size: 8px;
@@ -23,7 +23,6 @@ body {
   --carousel-arrow-bg-hover: var(--grey);
   --carousel-image-bg: #000;
   --carousel-image-height: 1fr;
-  --carousel-gap-value: 16px;
 
   background-color: var(--carousel-bg-color);
   font-family: var(--ff-marr-sans);
@@ -68,7 +67,10 @@ body {
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
-  padding: 20px 32px 16px 16px;
+  padding-top: 20px;
+  padding-right: calc(var(--carousel-padding-value) * 2);
+  padding-bottom: var(--carousel-gap-value);
+  padding-left: var(--carousel-padding-value);
   color: var(--carousel-title-color);
 }
 
@@ -98,9 +100,8 @@ body {
   display: grid;
   grid-template-rows: minmax(0, var(--carousel-image-height)) auto;
   grid-auto-flow: column;
-  padding: 0 var(--carousel-gap-value);
+  padding: 0 var(--carousel-padding-value);
   grid-gap: var(--carousel-gap-value);
-  grid-auto-flow: column;
   position: relative;
 }
 
