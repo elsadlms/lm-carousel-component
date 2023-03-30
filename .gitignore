@@ -1,1 +1,6 @@
 .DS_Store
+
+lm-carousel-component-default/dist
+lm-carousel-component-default/lib
+lm-carousel-component-story/dist
+lm-carousel-component-story/lib
