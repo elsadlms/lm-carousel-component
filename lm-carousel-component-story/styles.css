@@ -120,10 +120,22 @@ body {
 }
 
 .lmh-carousel-story_image-wrapper {
+  position: relative;
+  width: 100%;
   height: 100%;
   background-color: var(--carousel-image-bg);
   scroll-snap-align: center;
   font-size: 0;
+}
+
+/* fix provisoire pour faire marcher le scroll-snap-align des carousels pur texte sur safari */
+.lmh-carousel-story_image-wrapper::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--carousel-bg-color);
+  z-index: -1;
 }
 
 .lmh-carousel-story_image:first-child {
