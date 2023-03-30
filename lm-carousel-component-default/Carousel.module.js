@@ -1,5 +1,5 @@
-import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
-import { render, Component, createRef } from 'https://unpkg.com/preact?module'
+import { html } from './lib/htm.js'
+import { render, Component } from './lib/preact.js'
 
 import { CarouselElement } from './CarouselElement.module.js'
 import { ArrowSymbol } from './ArrowSymbol.module.js'

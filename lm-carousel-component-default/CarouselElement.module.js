@@ -1,5 +1,5 @@
-import { html } from 'https://unpkg.com/htm/preact/standalone.module.js'
-import { Component, createRef } from 'https://unpkg.com/preact?module'
+import { html } from './lib/htm.js'
+import { Component, createRef } from './lib/preact.js'
 
 import { StrToHtml } from './StrToHtml.module.js'
 import { ToggleSymbol } from './ToggleSymbol.module.js'
