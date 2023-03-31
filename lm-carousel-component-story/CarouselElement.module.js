@@ -7,7 +7,7 @@ export class CarouselElement extends Component {
   constructor(props) {
     super(props)
 
-    if (props.media.url?.endsWith('.mp4')) {
+    if (props.media.type === "video") {
       this.video = createRef()
     }
 
@@ -28,7 +28,7 @@ export class CarouselElement extends Component {
   }
 
   render(props) {
-    if (props.media.url?.endsWith('.mp4') && this.video.current) {
+    if (props.media.type === "video" && this.video.current) {
       // on lance automatiquement la vidéo si on arrive dessus
       if (props.selected && !this.lastSelected) {
         this.video.current.play()
@@ -66,7 +66,7 @@ export class CarouselElement extends Component {
     return html`
         <div class=${imageClasses.join(' ')}>
             <div ref=${props.imageWrapperRef} class="lmh-carousel-story_image-wrapper">
-                ${props.media.url?.endsWith('.mp4')
+                ${props.media.type === "video"
         ? html`<video onclick=${this.toggleVideo} ref=${this.video} muted loop playsinline autoplay="${props.selected}" src="${mediaURL}"/>`
         : (props.media.url ? html`<img src="${mediaURL}"/>` : '')}
             </div>
