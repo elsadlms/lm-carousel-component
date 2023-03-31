@@ -284,6 +284,10 @@ body {
   opacity: 0.4;
 }
 
+.lmh-carousel-story_arrow.lmh-carousel-story_arrow-disabled {
+  pointer-events: none;
+}
+
 @media (hover: hover) {
   .lmh-carousel-story_arrow:hover {
     background-color: var(--carousel-arrow-bg-hover);
