@@ -2,5 +2,8 @@
 
 lm-carousel-component-default/dist
 lm-carousel-component-default/lib
+lm-carousel-component-default/templates
+
 lm-carousel-component-story/dist
 lm-carousel-component-story/lib
+lm-carousel-component-story/templates
