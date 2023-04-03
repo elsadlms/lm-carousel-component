@@ -43,7 +43,7 @@ class Carousel extends Component {
       this.setLoopTimer(this.loopDuration)
     }
 
-    if (this.settings.toggleDescriptionBtn === false) {
+    if (!this.settings.toggleDescriptionBtn) {
       this.setState(curr => ({
         ...curr,
         descriptionOpen: true
@@ -142,7 +142,7 @@ class Carousel extends Component {
   render (props) {
     const containerClass = this.getClassList(this.settings)
 
-    const containerStyle = `--carousel-max-height: ${this.settings.height ? this.settings.height + 'px' : 'none'};`
+    const containerStyle = `--carousel-max-height: ${this.settings.height ? this.settings.height : 'none'};`
 
     return html`
             <div class='lmh-carousel ${containerClass}' style=${containerStyle}>

@@ -47,7 +47,7 @@ body {
 .lmh-carousel_images {
   display: grid;
   background-color: #000;
-  max-height: var(--carousel-max-height);
+  height: var(--carousel-max-height);
 }
 
 .lmh-carousel_images>* {
@@ -61,7 +61,7 @@ body {
   opacity: 0;
   overflow: hidden;
   transition: opacity 500ms;
-  max-height: var(--carousel-max-height);
+  height: var(--carousel-max-height);
 }
 
 .lmh-carousel_image>* {
@@ -118,7 +118,7 @@ body {
 
 @media screen and (max-width: 800px) {
   .lmh-carousel_caption a {
-    text-underline-offset: 0em;
+    text-underline-offset: unset;
   }
 }
 
