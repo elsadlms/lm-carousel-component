@@ -21,6 +21,7 @@ body {
   --carousel-arrow-color-disabled: rgba(255, 255, 255, 0.5);
   --carousel-arrow-bg: var(--light-grey);
   --carousel-arrow-bg-hover: var(--grey);
+  --carousel-fullscreen-btn-color: rgba(255, 255, 255, 0.8);
   --carousel-image-bg: #000;
   --carousel-image-height: 1fr;
 
@@ -54,8 +55,7 @@ body {
 }
 
 .lmh-carousel-story_btn-fullscreen svg path {
-  fill: #fff;
-  opacity: 0.4;
+  fill: var(--carousel-fullscreen-btn-color);
   transition: opacity 100ms;
 }
 
@@ -126,6 +126,7 @@ body {
   background-color: var(--carousel-image-bg);
   scroll-snap-align: center;
   font-size: 0;
+  overflow: hidden;
 }
 
 /* fix provisoire pour faire marcher le scroll-snap-align des carousels pur texte sur safari */

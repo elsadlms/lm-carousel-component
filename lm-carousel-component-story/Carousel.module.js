@@ -318,14 +318,18 @@ class Carousel extends Component {
     const controlsClasses = ['lmh-carousel-story_controls']
     if (this.state.controlsReady) controlsClasses.push('lmh-carousel-story_controls-visible')
 
+    console.log(this.settings.fullscreenButtonColor)
+
     const containerStyle = `
       --carousel-gap-value: ${this.gapValue}px;
       --carousel-padding-value: ${this.paddingValue}px;
       ${this.settings.backgroundColor ? `--carousel-bg-color: ${this.settings.backgroundColor}` : ''};
+      ${this.settings.imageBackgroundColor ? `--carousel-image-bg: ${this.settings.imageBackgroundColor}` : ''};
       ${this.settings.titleColor ? `--carousel-title-color: ${this.settings.titleColor}` : ''};
       ${this.settings.descriptionColor ? `--carousel-description-color: ${this.settings.descriptionColor}` : ''};
       ${this.settings.creditsColor ? `--carousel-credits-color: ${this.settings.creditsColor}` : ''};
       ${this.settings.dotColor ? `--carousel-dot-color: ${this.settings.dotColor}` : ''};
+      ${this.settings.fullscreenButtonColor ? `--carousel-fullscreen-btn-color: ${this.settings.fullscreenButtonColor}` : ''};
       ${this.settings.arrowColor ? `--carousel-arrow-color: ${this.settings.arrowColor}` : ''};
       ${this.settings.arrowColorDisabled ? `--carousel-arrow-color-disabled: ${this.settings.arrowColorDisabled}` : ''};
       ${this.settings.arrowBackgroundColor ? `--carousel-arrow-bg: ${this.settings.arrowBackgroundColor}` : ''};
